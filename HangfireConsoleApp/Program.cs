@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Hangfire;
 
 namespace HangfireConsoleApp
 {
@@ -10,6 +7,18 @@ namespace HangfireConsoleApp
     {
         static void Main(string[] args)
         {
+            GlobalConfiguration.Configuration.UseColouredConsoleLogProvider();
+            GlobalConfiguration.Configuration.UseSqlServerStorage("Hangfire");
+
+            using (var server = new BackgroundJobServer())
+            {
+                Console.WriteLine("Hangfire server started...");
+
+                BackgroundJob.Enqueue(() => Console.WriteLine("Hello world from hangfire."));
+            }
+
+            Console.WriteLine("Done");
+            Console.ReadLine();
         }
     }
 }
